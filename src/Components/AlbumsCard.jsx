@@ -5,17 +5,16 @@ import { Link } from 'react-router-dom';
 class AlbumsCard extends Component {
   render() {
     const { artistName, albumImg, albumName, albumId } = this.props;
-    const linkPath = `/album/${albumId}`;
     return (
       <div>
         <p>{ artistName }</p>
         <img src={ albumImg } alt={ artistName } />
         <p>{ albumName }</p>
         <Link
-          to={ linkPath }
+          to={ `/album/${albumId}` }
           data-testid={ `link-to-album-${albumId}` }
         >
-          Mais informações
+          Músicas
         </Link>
       </div>
     );

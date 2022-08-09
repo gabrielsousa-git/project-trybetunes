@@ -54,7 +54,7 @@ class Search extends Component {
 
   render() {
     const { isDisabled, bandName, buttonClicked, searchName } = this.state;
-    const result = this.createAlmbumsCArd();
+
     return (
       <section>
 
@@ -96,7 +96,7 @@ class Search extends Component {
                   {' '}
                   { searchName }
                 </p>
-                { result }
+                { this.createAlmbumsCArd() }
               </div>
             ) : (
               <p>Digite o nome do artista</p>
