@@ -14,7 +14,11 @@ class Album extends Component {
     favoriteMusic: [],
   }
 
-  async componentDidMount() {
+  componentDidMount() {
+    this.filteredSongs();
+  }
+
+  filteredSongs = async () => {
     const { match: { params: { id } } } = this.props;
     const musics = await getMusics(id);
     this.setState({
