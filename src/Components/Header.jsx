@@ -2,9 +2,6 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import Loading from '../pages/Loading';
 import { getUser } from '../services/userAPI';
-// import Search from './pages/Search';
-// import Favorites from './pages/Favorites';
-// import Profile from './pages/Profile';
 
 class Header extends Component {
   state = {

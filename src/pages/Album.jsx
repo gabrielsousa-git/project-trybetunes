@@ -1,13 +1,17 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Header from '../Components/Header';
-import getMusics from '../services/musicsAPI';
 import MusicCard from '../Components/MusicCard';
+import Loading from './Loading';
+import { addSong } from '../services/favoriteSongsAPI';
+import getMusics from '../services/musicsAPI';
 
 class Album extends Component {
   state = {
     albumInfo: {},
     albumMusics: [],
+    loading: false,
+    favoriteMusic: [],
   }
 
   async componentDidMount() {
@@ -19,8 +23,21 @@ class Album extends Component {
     });
   }
 
+  isFavoriteMusic = async (object) => {
+    const { favoriteMusic } = this.state;
+    this.setState({
+      loading: true,
+    });
+    const result = await addSong(object);
+    console.log(result);
+    this.setState({
+      loading: false,
+      favoriteMusic: [...favoriteMusic, object.trackId],
+    });
+  }
+
   render() {
-    const { albumInfo, albumMusics } = this.state;
+    const { albumInfo, albumMusics, loading, favoriteMusic } = this.state;
 
     const { collectionName, artworkUrl100, artistName } = albumInfo;
 
@@ -31,6 +48,10 @@ class Album extends Component {
           key={ trackId }
           previewUrl={ previewUrl }
           trackName={ trackName }
+          trackId={ trackId }
+          isFavoriteMusic={ this.isFavoriteMusic }
+          musicObj={ music }
+          checked={ favoriteMusic.some((favSong) => music.trackId === favSong) }
         />
       );
     });
@@ -42,14 +63,17 @@ class Album extends Component {
           <Header />
         </header>
 
-        <main>
-          <p data-testid="artist-name">{ artistName }</p>
-          <img src={ artworkUrl100 } alt={ collectionName } />
-          <p data-testid="album-name">{ collectionName }</p>
-          <div>
-            { musicsHtmlElements }
-          </div>
-        </main>
+        { loading ? <Loading />
+          : (
+            <main>
+              <p data-testid="artist-name">{ artistName }</p>
+              <img src={ artworkUrl100 } alt={ collectionName } />
+              <p data-testid="album-name">{ collectionName }</p>
+              <div>
+                { musicsHtmlElements }
+              </div>
+            </main>
+          )}
       </section>
     );
   }
