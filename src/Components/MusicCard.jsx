@@ -1,19 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-// import { addSong } from '../services/favoriteSongsAPI';
-// import getMusics from '../services/musicsAPI';
 
 class MusicCard extends Component {
-  // handleInputChange = async () => {
-  //   const { trackId } = this.props;
-  //   const { history } = this.props;
-  //   const musics = await getMusics(trackId);
-  //   console.log(musics);
-  //   history.push('/loading');
-  //   await addSong(musics);
-  //   history.push('/album');
-  // }
-
   render() {
     const {
       previewUrl,
@@ -52,9 +40,9 @@ class MusicCard extends Component {
 MusicCard.propTypes = {
   previewUrl: PropTypes.string.isRequired,
   trackName: PropTypes.string.isRequired,
-  trackId: PropTypes.string.isRequired,
+  trackId: PropTypes.number.isRequired,
   checked: PropTypes.bool.isRequired,
-  musicObj: PropTypes.objectOf(PropTypes.string).isRequired,
+  musicObj: PropTypes.objectOf(PropTypes.number).isRequired,
   isFavoriteMusic: PropTypes.func.isRequired,
 };
 

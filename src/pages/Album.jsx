@@ -41,20 +41,20 @@ class Album extends Component {
 
     const { collectionName, artworkUrl100, artistName } = albumInfo;
 
-    const musicsHtmlElements = albumMusics.map((music) => {
-      const { previewUrl, trackId, trackName } = music;
-      return (
-        <MusicCard
-          key={ trackId }
-          previewUrl={ previewUrl }
-          trackName={ trackName }
-          trackId={ trackId }
-          isFavoriteMusic={ this.isFavoriteMusic }
-          musicObj={ music }
-          checked={ favoriteMusic.some((favSong) => music.trackId === favSong) }
-        />
-      );
-    });
+    // const musicsHtmlElements = albumMusics.map((music) => {
+    //   const { previewUrl, trackId, trackName } = music;
+    //   return (
+    //     <MusicCard
+    //       key={ trackId }
+    //       previewUrl={ previewUrl }
+    //       trackName={ trackName }
+    //       trackId={ trackId }
+    //       isFavoriteMusic={ this.isFavoriteMusic }
+    //       musicObj={ music }
+    //       checked={ favoriteMusic.some((favSong) => music.trackId === favSong) }
+    //     />
+    //   );
+    // });
 
     return (
       <section>
@@ -70,7 +70,22 @@ class Album extends Component {
               <img src={ artworkUrl100 } alt={ collectionName } />
               <p data-testid="album-name">{ collectionName }</p>
               <div>
-                { musicsHtmlElements }
+                {
+                  albumMusics.map((music) => {
+                    const { previewUrl, trackId, trackName } = music;
+                    return (
+                      <MusicCard
+                        key={ trackId }
+                        previewUrl={ previewUrl }
+                        trackName={ trackName }
+                        trackId={ trackId }
+                        isFavoriteMusic={ this.isFavoriteMusic }
+                        musicObj={ music }
+                        checked={ favoriteMusic.some((favSo) => music.trackId === favSo) }
+                      />
+                    );
+                  })
+                }
               </div>
             </main>
           )}
