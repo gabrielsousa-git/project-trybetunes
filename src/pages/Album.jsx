@@ -28,8 +28,7 @@ class Album extends Component {
     this.setState({
       loading: true,
     });
-    const result = await addSong(object);
-    console.log(result);
+    await addSong(object);
     this.setState({
       loading: false,
       favoriteMusic: [...favoriteMusic, object.trackId],
