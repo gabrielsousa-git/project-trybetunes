@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Header from '../Components/Header';
 import MusicCard from '../Components/MusicCard';
 import Loading from './Loading';
-import { addSong } from '../services/favoriteSongsAPI';
+import { addSong, getFavoriteSongs } from '../services/favoriteSongsAPI';
 import getMusics from '../services/musicsAPI';
 
 class Album extends Component {
@@ -11,11 +11,12 @@ class Album extends Component {
     albumInfo: {},
     albumMusics: [],
     loading: false,
-    favoriteMusic: [],
+    favoriteMusics: [],
   }
 
   componentDidMount() {
     this.filteredSongs();
+    this.getFavoriteMusics();
   }
 
   filteredSongs = async () => {
@@ -28,36 +29,48 @@ class Album extends Component {
   }
 
   isFavoriteMusic = async (object) => {
-    const { favoriteMusic } = this.state;
+    const { favoriteMusics } = this.state;
     this.setState({
       loading: true,
     });
     await addSong(object);
     this.setState({
       loading: false,
-      favoriteMusic: [...favoriteMusic, object.trackId],
+      favoriteMusics: [...favoriteMusics, object.trackId],
+    });
+  }
+
+  getFavoriteMusics = async () => {
+    const { favoriteMusics } = this.state;
+    this.setState({
+      loading: true,
+    });
+    const favorites = await getFavoriteSongs();
+    this.setState({
+      loading: false,
+      favoriteMusics: [...favoriteMusics, ...favorites.map((fav) => fav.trackId)],
     });
   }
 
   render() {
-    const { albumInfo, albumMusics, loading, favoriteMusic } = this.state;
+    const { albumInfo, albumMusics, loading, favoriteMusics } = this.state;
 
     const { collectionName, artworkUrl100, artistName } = albumInfo;
 
-    // const musicsHtmlElements = albumMusics.map((music) => {
-    //   const { previewUrl, trackId, trackName } = music;
-    //   return (
-    //     <MusicCard
-    //       key={ trackId }
-    //       previewUrl={ previewUrl }
-    //       trackName={ trackName }
-    //       trackId={ trackId }
-    //       isFavoriteMusic={ this.isFavoriteMusic }
-    //       musicObj={ music }
-    //       checked={ favoriteMusic.some((favSong) => music.trackId === favSong) }
-    //     />
-    //   );
-    // });
+    const musicsHtmlElements = albumMusics.map((music) => {
+      const { previewUrl, trackId, trackName } = music;
+      return (
+        <MusicCard
+          key={ trackId }
+          previewUrl={ previewUrl }
+          trackName={ trackName }
+          trackId={ trackId }
+          isFavoriteMusic={ this.isFavoriteMusic }
+          musicObj={ music }
+          checked={ favoriteMusics.some((favSong) => music.trackId === favSong) }
+        />
+      );
+    });
 
     return (
       <section>
@@ -73,22 +86,7 @@ class Album extends Component {
               <img src={ artworkUrl100 } alt={ collectionName } />
               <p data-testid="album-name">{ collectionName }</p>
               <div>
-                {
-                  albumMusics.map((music) => {
-                    const { previewUrl, trackId, trackName } = music;
-                    return (
-                      <MusicCard
-                        key={ trackId }
-                        previewUrl={ previewUrl }
-                        trackName={ trackName }
-                        trackId={ trackId }
-                        isFavoriteMusic={ this.isFavoriteMusic }
-                        musicObj={ music }
-                        checked={ favoriteMusic.some((favSo) => music.trackId === favSo) }
-                      />
-                    );
-                  })
-                }
+                { musicsHtmlElements }
               </div>
             </main>
           )}
